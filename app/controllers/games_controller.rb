@@ -6,8 +6,13 @@ class GamesController < ApplicationController
   end
 
   def create
+    puzzle = if params[:word]
+               Rails.logger.silence do
+                 Puzzle.create(phrase: params[:word])
+               end
+             end
     @game = Game.new(
-      puzzle: Puzzle.random,
+      puzzle: puzzle || Puzzle.random,
       status: :in_progress,
       player_id: session[:player_id]
     )

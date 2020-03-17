@@ -1,4 +1,6 @@
 <%= form_for game do |f| %>
+  <%= label_tag(:word, "Word:") %>
+  <%= password_field_tag(:word) %>
   <%= f.submit "Start a Game" %>
 <% end %>
 
