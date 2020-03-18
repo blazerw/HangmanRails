@@ -21,6 +21,12 @@
   max-width: 800px;
 }
 
+fieldset.game {
+  text-align: left;
+  margin: auto;
+  width: 350px;
+}
+
 form.guess {
   display: inline-block;
 }

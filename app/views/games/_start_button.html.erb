@@ -1,6 +1,19 @@
-<%= form_for game do |f| %>
-  <%= label_tag(:word, "Word:") %>
-  <%= password_field_tag(:word) %>
-  <%= f.submit "Start a Game" %>
+<%= form_for(game, html: {class: "pure-form"}) do |f| %>
+  <% if flash[:error] %>
+    <div class="error">
+      <%= flash[:error] %>
+    </div>
+  <% end %>
+  <fieldset class="game">
+    <label for="team_hr" class="pure-radio">
+      <%= radio_button_tag(:team, "HR") %>
+      We are H.R.
+    </label>
+    <label for="team_dev" class="pure-radio">
+      <%= radio_button_tag(:team, "Dev") %>
+      Dev Rulz
+    </label>
+    <%= password_field_tag(:word, "", placeholder: "Word") %>
+    <%= f.submit("Start a Game", class: "pure-button pure-button-primary") %>
+  </fieldset>
 <% end %>
-
