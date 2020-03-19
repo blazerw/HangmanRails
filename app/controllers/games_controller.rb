@@ -4,6 +4,7 @@ class GamesController < ApplicationController
   def index
     @games = Game.where(player_id: session[:player_id]).in_progress
     @game = Game.new(player_id: session[:player_id])
+    # @score = Game.execute("select sum(case when status = 2 and team = 'Dev' then 1 else 0 end) dev_score, sum(case when status = 2 and team = 'HR' then 1 else 0 end) hr_score from games")
   end
 
   def create
