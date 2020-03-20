@@ -12,5 +12,8 @@
     How about another?
   </div>
 <% end %>
+<% if @game.lost? || @game.won? %>
+  <span id="stop"></span>
+<% end %>
 
 <%= render partial: "games/start_button", locals: { game: Game.new } %>

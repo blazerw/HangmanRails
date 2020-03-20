@@ -27,7 +27,7 @@
   // Timer in minutes
   var minutes = 10;
 
-  var guessedCount = $("#hangman form.guessed").length
+  var guessedCount = $("#hangman form.guessed").length;
 
   if(guessedCount > 0) {
     // Set the date we're counting down to
@@ -53,7 +53,7 @@
       + minutes + "m " + seconds + "s ";
 
       // If the count down is finished, write some text
-      if (distance < 0) {
+      if (distance < 0 || $("#stop").length) {
         clearInterval(x);
         document.getElementById("timer").innerHTML = "EXPIRED";
       }
