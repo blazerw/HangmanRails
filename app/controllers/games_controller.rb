@@ -8,6 +8,7 @@ class GamesController < ApplicationController
   end
 
   def create
+    session[:timer_start] = nil
     puzzle = if params.require(:word)
                Rails.logger.silence do
                  Puzzle.create(phrase: params[:word])

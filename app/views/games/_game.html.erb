@@ -1,8 +1,11 @@
 <div id="hangman">
   <h1 class="header">Hangman</h1>
-  <div class="subheader" id="timer">
+  <div class="subheader">
     A game written in Ruby on Rails
     (<%= link_to "Forked Source", "https://github.com/blazerw/HangmanRails" %>)
+  </div>
+  <div class="subheader" id="timer">
+    &nbsp;
   </div>
   <hr />
 
@@ -31,7 +34,7 @@
 
   if(guessedCount > 0) {
     // Set the date we're counting down to
-    var countDownDate = new Date(Date.now() + (minutes * 60 * 1000));
+    var countDownDate = new Date(<%= session[:timer_start] %> + (minutes * 60 * 1000) - 1000);
 
     // Update the count down every 1 second
     var x = setInterval(function() {
@@ -50,7 +53,7 @@
 
       // Display the result in the element with id="demo"
       document.getElementById("timer").innerHTML = days + "d " + hours + "h "
-      + minutes + "m " + seconds + "s ";
+      + minutes + "m " + seconds + "s";
 
       // If the count down is finished, write some text
       if (distance < 0 || $("#stop").length) {
