@@ -58,7 +58,9 @@
       // If the count down is finished, write some text
       if (distance < 0 || $("#stop").length) {
         clearInterval(x);
-        document.getElementById("timer").innerHTML = "EXPIRED";
+        if (distance < 0) {
+          document.getElementById("timer").innerHTML = "EXPIRED";
+        }
       }
     }, 1000);
   }
