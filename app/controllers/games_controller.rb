@@ -4,7 +4,8 @@ class GamesController < ApplicationController
   def index
     @games = Game.where(player_id: session[:player_id]).in_progress
     @game = Game.new(player_id: session[:player_id])
-    # @score = Game.execute("select sum(case when status = 2 and team = 'Dev' then 1 else 0 end) dev_score, sum(case when status = 2 and team = 'HR' then 1 else 0 end) hr_score from games")
+    @score = score
+    @details = details
   end
 
   def create
@@ -38,5 +39,34 @@ class GamesController < ApplicationController
     flash[:error] = "You forgot something. #{_e.message}"
     index
     render :index
+  end
+
+  private
+
+  def details
+    sql = <<~SQL
+      SELECT CAST(g.created_at AS DATE) AS day, g.team AS host,
+        CASE WHEN g.team='Dev' THEN 'HR' ELSE 'Dev' END AS player, p.phrase AS word,
+        CASE WHEN g.status=2 THEN CASE WHEN g.team='Dev' THEN 'HR' ELSE 'Dev' END ELSE g.team END AS winner
+      FROM games g
+        INNER JOIN puzzles p ON g.puzzle_id = p.id
+      ORDER BY g.created_at DESC
+    SQL
+    Game.connection.select_all(sql)
+  end
+
+  def score
+    sql = <<~SQL
+      SELECT SUM(
+          CASE WHEN status = 2 AND team = 'HR' THEN 1
+               WHEN status = 1 AND team = 'Dev' THEN 1 ELSE 0 END
+        ) dev_score,
+        SUM(
+          CASE WHEN status = 1 AND team = 'HR' THEN 1
+               WHEN status = 2 AND team = 'Dev' THEN 1 ELSE 0 END
+        ) hr_score
+      FROM games
+    SQL
+    @score = Game.connection.select_all(sql)
   end
 end
