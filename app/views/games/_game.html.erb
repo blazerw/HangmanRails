@@ -28,13 +28,13 @@
 
 <script>
   // Timer in minutes
-  var minutes = 10;
+  var minutes = 8;
 
   var guessedCount = $("#hangman form.guessed").length;
 
   if(guessedCount > 0) {
     // Set the date we're counting down to
-    var countDownDate = new Date(<%= session[:timer_start] %> + (minutes * 60 * 1000) - 1000);
+    var countDownDate = new Date(<%= session["timer_start_#{@game.id}".to_sym] %> + (minutes * 60 * 1000) - 1000);
 
     // Update the count down every 1 second
     var x = setInterval(function() {

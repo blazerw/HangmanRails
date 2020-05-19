@@ -3,7 +3,7 @@ class GuessesController < ApplicationController
   before_action :load_game
 
   def create
-    session[:timer_start] ||= Time.now.to_i * 1000
+    session["timer_start_#{@game.id}".to_sym] ||= Time.now.to_i * 1000
     Guess.create(
       @game,
       guess_params,
