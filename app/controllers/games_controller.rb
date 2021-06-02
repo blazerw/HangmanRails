@@ -23,8 +23,16 @@ class GamesController < ApplicationController
       team: params.require(:team)
     )
     if @game.save
+      timer_name = "timer_start_#{@game.id}".to_sym
+      Rails.logger.info "*" * 120
+      Rails.logger.info "timer_name: #{timer_name}"
+      Rails.logger.info "Old value: #{session[timer_name]}"
+      session[timer_name] = nil
+      Rails.logger.info "New value: #{session[timer_name]}"
+      Rails.logger.info "*" * 120
       redirect_to @game
     else
+      flash[:error] = "Game didn't save. #{@game.errors.join("\n")}"
       render :index
     end
   end
@@ -57,14 +65,23 @@ class GamesController < ApplicationController
 
   def score
     sql = <<~SQL
-      SELECT SUM(
+      SELECT
+        SUM(
+          CASE WHEN status = 2 AND team = 'HR' AND created_at >= '2021-01-01 00:00:00.000' THEN 1
+               WHEN status = 1 AND team = 'Dev' AND created_at >= '2021-01-01 00:00:00.000' THEN 1 ELSE 0 END
+        ) dev_score,
+        SUM(
+          CASE WHEN status = 1 AND team = 'HR' AND created_at >= '2021-01-01 00:00:00.000' THEN 1
+               WHEN status = 2 AND team = 'Dev' AND created_at >= '2021-01-01 00:00:00.000' THEN 1 ELSE 0 END
+        ) hr_score,
+        SUM(
           CASE WHEN status = 2 AND team = 'HR' THEN 1
                WHEN status = 1 AND team = 'Dev' THEN 1 ELSE 0 END
-        ) dev_score,
+        ) dev_alltime,
         SUM(
           CASE WHEN status = 1 AND team = 'HR' THEN 1
                WHEN status = 2 AND team = 'Dev' THEN 1 ELSE 0 END
-        ) hr_score
+        ) hr_alltime
       FROM games
     SQL
     @score = Game.connection.select_all(sql)

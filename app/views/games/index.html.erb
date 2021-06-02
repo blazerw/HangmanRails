@@ -5,7 +5,7 @@
     (<%= link_to "Forked Source", "https://github.com/blazerw/HangmanRails" %>)
   </div>
   <div class="subheader" id="timer">
-    8 minute timer
+    7 minute timer
   </div>
   <hr />
 
@@ -26,14 +26,26 @@
   <%= render partial: "games/start_button", locals: { game: @game } %>
   <div>
     <table class="pure-table" style="margin: 0.5em auto;">
-      <tr>
-        <th><%= @score.columns[0] %></th>
-        <td><%= @score.rows.first[0] %></td>
-      </tr>
-      <tr>
-        <th><%= @score.columns[1] %></th>
-        <td><%= @score.rows.first[1] %></td>
-      </tr>
+      <thead>
+        <tr>
+          <th></th>
+          <th><strong>2021</strong></th>
+          <th><strong>All Time</strong></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th><%= @score.columns[0] %></th>
+          <td><%= @score.rows.first[0] %></td>
+          <td><%= @score.rows.first[2] %></td>
+        </tr>
+        <tr>
+          <th><%= @score.columns[1] %></th>
+          <td><%= @score.rows.first[1] %></td>
+          <td><%= @score.rows.first[3] %></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
   <div>
     <table class="pure-table" style="margin: 0.5em auto;">
